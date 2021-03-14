@@ -1,13 +1,14 @@
 <template>
-  <l-map style="height: 100%" :zoom="zoom" :center="center">
+  <LMap style="height: 100%" :zoom="zoom" :center="center" @click="getLatLng">
     <l-tile-layer :url="url"></l-tile-layer>
     <l-marker :lat-lng="markerLatLng" ></l-marker>
-  </l-map>
+  </LMap>
 </template>
 
 <script>
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 // import { OriginInputBox } from "./components/OriginInputBox.vue"
+
 
 export default {
   components: { LMap, LTileLayer, LMarker },
@@ -19,6 +20,11 @@ export default {
       markerLatLng: [14.599512, 120.984222]
     };
   },
+  methods: {
+    getLatLng(e) {
+      alert(e.latlng.lat + "," + e.latlng.lng)
+    }
+  }
 };
 </script>
 
