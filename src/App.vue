@@ -1,13 +1,13 @@
 <template>
-  <LMap style="height: 100%" :zoom="zoom" :center="center" @click="getLatLng">
+  <LMap style="height: 100%" :zoom="zoom" :center="center" @click="updateLatLng"> 
     <l-tile-layer :url="url"></l-tile-layer>
-    <l-marker :lat-lng="markerLatLng" ></l-marker>
+    <l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable></l-marker>
   </LMap>
 </template>
 
 <script>
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
-// import { OriginInputBox } from "./components/OriginInputBox.vue"
+// import { LatLng } from "leaflet"
 
 
 export default {
@@ -17,14 +17,22 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       zoom: 13,
       center: [14.599512, 120.984222],
-      markerLatLng: [14.599512, 120.984222]
+      markerLatLng: [14.599512, 120.984222],
+      position: {}
+
     };
   },
   methods: {
-    getLatLng(e) {
-      alert(e.latlng.lat + "," + e.latlng.lng)
+    // getLatLng(e) {
+    //   alert(e.latlng.lat + "," + e.latlng.lng)
+    //   // _latlng = LMap.latlng(e.latlng.lat,e.latlng.lng)
+    // },
+
+    updateLatLng(e) {
+      // alert(e.latlng.lat + "," + e.latlng.lng)
+      this.position = e.latlng;
     }
-  }
+  },
 };
 </script>
 
@@ -35,7 +43,7 @@ body {
 }
 html,
 body,
-map {
+#map {
   height: 100%;
   width: 100%;
 }
