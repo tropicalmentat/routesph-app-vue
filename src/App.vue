@@ -1,8 +1,26 @@
 <template>
-  <LMap style="height: 100%" :zoom="zoom" :center="center" @click="updateLatLng"> 
-    <l-tile-layer :url="url"></l-tile-layer>
-    <l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable></l-marker>
-  </LMap>
+  <v-app>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-text-field label="Origin">
+          </v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-text-field label="Destination">
+          </v-text-field>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <LMap style="height: 100%" :zoom="zoom" :center="center" @click="updateLatLng"> 
+
+      <l-tile-layer :url="url"></l-tile-layer>
+      <l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable></l-marker>
+    </LMap>
+  </v-app>
 </template>
 
 <script>
