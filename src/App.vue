@@ -1,27 +1,30 @@
 <template>
   <v-app>
-    <v-container>
-      <v-row>
-        <v-col>
-          <v-text-field label="Origin">
-          </v-text-field>
+    <v-container class="pa-0 ma-0" no-gutters fluid>
+      <v-row style="height: 600px;">
+        <v-col align-self="start" tile>
+          <v-sheet height="200">
+            <v-text-field label="Origin" v-model="position">
+            </v-text-field>
+            <v-text-field label="Destination" v-model="position">
+            </v-text-field>
+          </v-sheet>
         </v-col>
-      </v-row>
-      <v-row>
         <v-col>
-          <v-text-field label="Destination">
-          </v-text-field>
+           <LMap :zoom="zoom" :center="center" @click="updateLatLng"> 
+            <l-tile-layer :url="url"></l-tile-layer>
+            <l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable></l-marker>
+          </LMap>
+         
         </v-col>
       </v-row>
     </v-container>
 
-    <LMap style="height: 100%" :zoom="zoom" :center="center" @click="updateLatLng"> 
-
-      <l-tile-layer :url="url"></l-tile-layer>
-      <l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable></l-marker>
-    </LMap>
+   
   </v-app>
 </template>
+
+
 
 <script>
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
@@ -55,14 +58,5 @@ export default {
 </script>
 
 <style>
-body {
-  padding: 0;
-  margin: 0;
-}
-html,
-body,
-#map {
-  height: 100%;
-  width: 100%;
-}
+
 </style>
