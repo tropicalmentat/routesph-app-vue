@@ -7,7 +7,7 @@
             </v-label>
             <v-text-field label="Origin" v-model="origin">
             </v-text-field>
-            <v-text-field label="Destination">
+            <v-text-field label="Destination" v-model="destination">
             </v-text-field>
         </v-col>
         <v-col>
@@ -16,10 +16,10 @@
             <l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable>
               <l-popup>
                 <V-container>
-                  <v-btn color="green" click="setOrigin=">
+                  <v-btn color="green" block @click="setOrigin">
                     Set Origin
                   </v-btn>
-                  <v-btn color="red">
+                  <v-btn color="red" block @click="setDestination">
                     Set Destination
                   </v-btn>
                 </v-container>
@@ -47,7 +47,8 @@ export default {
       center: [14.599512, 120.984222],
       markerLatLng: [14.599512, 120.984222],
       position: {},
-      origin:{}
+      origin:{},
+      destination:{}
 
     };
   },
@@ -61,8 +62,11 @@ export default {
       // alert(e.latlng.lat + "," + e.latlng.lng)
       this.position = e.latlng;
     },
-    setOrigin(e) {
-      this.origin = e.latlng;
+    setOrigin() {
+      this.origin = this.position;
+    },
+    setDestination() {
+      this.destination = this.position;
     }
   },
 };
