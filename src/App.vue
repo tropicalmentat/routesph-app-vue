@@ -25,6 +25,8 @@
                 </v-container>
               </l-popup>
             </l-marker>
+            <l-marker id="origin" v-if="origin.lat && origin.lng" :lat-lng.sync="origin"></l-marker>
+            <l-marker id="destination" v-if="destination.lat && destination.lng" :lat-lng.sync="destination"></l-marker>
           </LMap>
         </v-col>
       </v-row>
@@ -48,7 +50,7 @@ export default {
       markerLatLng: [14.599512, 120.984222],
       position: {},
       origin:{},
-      destination:{}
+      destination:{},
 
     };
   },
@@ -64,6 +66,7 @@ export default {
     },
     setOrigin() {
       this.origin = this.position;
+      this.originMarker.push(this.position)
     },
     setDestination() {
       this.destination = this.position;
