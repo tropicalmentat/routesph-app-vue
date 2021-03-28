@@ -99,7 +99,12 @@ export default {
       alert(e);
     }
     this.route = coordinates;
-    alert(this.route);
+    var coordinate = []
+
+      for (coordinate of coordinates) {
+        this.cleaned_latlng.push([coordinate[1],coordinate[0]])
+      }
+    // alert(this.route);
     }
   },
 };
