@@ -83,8 +83,8 @@ export default {
     resetData() {
       this.origin = {}
       this.destination = {}
-      this.route = {}
-      this.cleaned_latlng = {}
+      this.route = []
+      this.cleaned_latlng = []
       this.position = {}
     },
     async getRoute() {
