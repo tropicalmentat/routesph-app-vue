@@ -1,3 +1,12 @@
+<!-- TODO
+- Bind text in text field with orig and dest marker lat lng using key on enter event and clear event https://stackoverflow.com/questions/53825246/bind-multiple-events-to-v-on-directive-in-vue
+- Make text input text fields and orig and dest markers binded to the same state
+- fix minor bug in polyline color. doesn't conform to specified color in template
+- route distance text should be 2 decimal places
+- color code origin and destination markers
+- change selection marker icon
+- add feature to switch origin and destination
+ -->
 <template>
 	<v-app>
 		<v-row>
@@ -7,9 +16,9 @@
 						ROWT.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
-					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt">
+					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt" clearable>
 					</v-text-field>
-					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt">
+					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable>
 					</v-text-field>
 				</v-card>
 				<v-card outlined tile class="pa-2">
@@ -28,9 +37,9 @@
 				</v-container>
 			</v-col>
 			<v-col>
-				<LMap :zoom="zoom" :center="center" @click="updateLatLng"> 
+				<LMap :zoom="zoom" :center="center" @dblclick="updateLatLng"> 
 					<l-tile-layer :url="url"></l-tile-layer>
-					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="green"></l-polyline>
+					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="red"></l-polyline>
 					<l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable>
 					<l-tooltip>Drag me! Then click!</l-tooltip>
 					<l-popup>
