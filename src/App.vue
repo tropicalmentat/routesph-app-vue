@@ -20,9 +20,9 @@
 						ROWT.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
-					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt" clearable>
+					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt" clearable v-on:keyup.enter="convertTooriginlatlng">
 					</v-text-field>
-					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable>
+					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable v-on:keyup.enter="convertTodestinationlatlng">
 					</v-text-field>
 				</v-card>
 				<v-card outlined tile class="pa-2">
@@ -71,7 +71,7 @@
 import { LMap, LTileLayer, LMarker, LPopup, LPolyline, LTooltip} from "vue2-leaflet";
 
 export default {
-  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline, LTooltip},
+  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline, LTooltip },
   data() {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -89,13 +89,24 @@ export default {
     };
   },
   methods: {
+    convertTooriginlatlng() {
+      let splitText = this.origin_txt.split(",")
+      let lat = Number(splitText[0])
+      let lng = Number(splitText[1])
+      this.origin = {lat,lng}
+    },
+    convertTodestinationlatlng() {
+      let splitText = this.destination_txt.split(",")
+      let lat = Number(splitText[0])
+      let lng = Number(splitText[1])
+      this.destination = {lat,lng}
+    },
     updateLatLng(e) {
       this.position = e.latlng;
     },
     setOrigin() {
       this.origin = this.position;
       this.origin_txt = this.position.lat.toString().concat(",",this.position.lng.toString())
-      this.originMarker.push(this.position)
     },
     setDestination() {
       this.destination = this.position;
