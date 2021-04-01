@@ -6,6 +6,10 @@
 - color code origin and destination markers
 - change selection marker icon
 - add feature to switch origin and destination
+- add feature to conditionally render input text fields for orig and dest lat,lng OR address (will need to implement geocoding first)
+- add estimate time of travel
+- improve banner text OR use image
+- build own tileserver and style (big effort to dev!)
  -->
 <template>
 	<v-app>
