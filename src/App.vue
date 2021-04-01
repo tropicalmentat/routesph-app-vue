@@ -2,24 +2,30 @@
 	<v-app>
 		<v-row>
 			<v-col lg="3">
-				<v-container fluid>
-				<v-label>
-					rowt.ph
-				</v-label>
-				<v-text-field label="Origin" placeholder="origin" v-model="origin">
-				</v-text-field>
-				<v-text-field label="Destination" v-model="destination">
-				</v-text-field>
-				<v-btn color="grey" block @click="getRoute">
-					Plan Route
-				</v-btn>
-				<v-btn color="pink" @click="resetData" block>
-					Reset
-				</v-btn>
-				<v-card>
+				<v-container class="d-flex flex-column">
+					<v-label>
+						ROWT.PH
+					</v-label>
+				<v-card outlined tile class="pa-2">
+					<v-text-field label="Origin" placeholder="origin" v-model="origin">
+					</v-text-field>
+					<v-text-field label="Destination" v-model="destination">
+					</v-text-field>
+				</v-card>
+				<v-card outlined tile class="pa-2">
+					<v-btn color="green" block @click="getRoute">
+						Plan Route
+					</v-btn>
+				</v-card>
+					<v-card outlined tile class="pa-2">
+					<v-btn color="pink" @click="resetData" block>
+						Reset
+					</v-btn>
+				</v-card>
+				<v-card outlined tile class="pa-2">
 					Distance:  {{ distance/1000 }} km
 				</v-card>
-			</v-container>
+				</v-container>
 			</v-col>
 			<v-col>
 				<LMap :zoom="zoom" :center="center" @click="updateLatLng"> 
