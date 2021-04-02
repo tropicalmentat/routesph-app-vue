@@ -1,7 +1,6 @@
 <!-- TODO
 - implement form input validation -> lat,lng formatting | plan route button lat,lng checking before sending route generation request
 - fix minor bug in polyline color. doesn't conform to specified color in template
-- route distance text should be 2 decimal places
 - color code origin and destination markers
 - change selection marker icon
 - add feature to switch origin and destination
@@ -35,16 +34,20 @@
 					</v-btn>
 				</v-card>
 				<v-card outlined tile class="pa-2">
-					Distance:  {{ distance/1000 }} km
+					<div>
+						Distance:  {{ distance }} km
+					</div>
+					<div>
+						Estimated Travel Time: {{ time }} minutes
+					</div>
 				</v-card>
 				</v-container>
 			</v-col>
 			<v-col>
-				<LMap :zoom="zoom" :center="center" @dblclick="updateLatLng"> 
+				<LMap :zoom="zoom" :center="center" @click="updateLatLng"> 
 					<l-tile-layer :url="url"></l-tile-layer>
 					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="red"></l-polyline>
 					<l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable>
-					<l-tooltip>Drag me! Then click!</l-tooltip>
 					<l-popup>
 						<v-container>
 							<v-btn color="green" block @click="setOrigin">
@@ -67,10 +70,10 @@
 
 
 <script>
-import { LMap, LTileLayer, LMarker, LPopup, LPolyline, LTooltip} from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup, LPolyline } from "vue2-leaflet";
 
 export default {
-  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline, LTooltip },
+  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline },
   data() {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -84,7 +87,8 @@ export default {
       destination:{},
       cleaned_latlng: [],
       route: [],
-      distance: ""
+      distance: "",
+      time: ""
     };
   },
   methods: {
@@ -111,12 +115,12 @@ export default {
     },
     setOrigin() {
       this.origin = this.position
-      this.origin_txt = this.position.lat.toString().concat(",",this.position.lng.toString())
+      this.origin_txt = this.position.lat.toFixed(7).toString().concat(",",this.position.lng.toFixed(7).toString())
       this.position = ""
     },
     setDestination() {
       this.destination = this.position
-      this.destination_txt = this.position.lat.toString().concat(",",this.position.lng.toString())
+      this.destination_txt = this.position.lat.toFixed(7).toString().concat(",",this.position.lng.toFixed(7).toString())
       this.position = ""
     },
     reverseLatLng(coordinates) {
@@ -135,10 +139,12 @@ export default {
       this.distance = ""
       this.origin_txt = ""
       this.destination_txt = ""
+      this.time = ""
     },
     async getRoute() {
       let coordinates = "Unresolved";
       let distance = "Unresolved";
+      let time = "Unresolved";
       try {
       const result = await fetch (
         `https://graphhopper.com/api/1/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&vehicle=bike&locale=en&calc_points=true&points_encoded=false&key=23959cc2-2380-4962-bb26-3746b8d7ff6b`
@@ -147,12 +153,14 @@ export default {
         const body = await result.json();
         coordinates = body["paths"][0]["points"]["coordinates"];
         distance = body["paths"][0]["distance"]
+        time = body["paths"][0]["time"]
       }
     } catch(e) {
       alert(e);
     }
     this.route = coordinates;
-    this.distance = distance;
+    this.distance = (distance/1000).toFixed(2);
+    this.time = (time/(1000*60)).toFixed(2);
 
     // This is done to swap lng,lat in the result to lat,lng for the polyline to render
     var coordinate = []
