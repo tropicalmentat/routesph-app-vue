@@ -1,4 +1,5 @@
 <!-- TODO
+- implement form input validation -> lat,lng formatting | plan route button lat,lng checking before sending route generation request
 - fix minor bug in polyline color. doesn't conform to specified color in template
 - route distance text should be 2 decimal places
 - color code origin and destination markers
