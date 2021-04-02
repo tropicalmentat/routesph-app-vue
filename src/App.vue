@@ -1,6 +1,4 @@
 <!-- TODO
-- Bind text in text field with orig and dest marker lat lng using key on enter event and clear event https://stackoverflow.com/questions/53825246/bind-multiple-events-to-v-on-directive-in-vue
-- Make text input text fields and orig and dest markers binded to the same state
 - fix minor bug in polyline color. doesn't conform to specified color in template
 - route distance text should be 2 decimal places
 - color code origin and destination markers
@@ -20,9 +18,9 @@
 						ROWT.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
-					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt" clearable v-on:keyup.enter="convertTooriginlatlng">
+					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
 					</v-text-field>
-					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable v-on:keyup.enter="convertTodestinationlatlng">
+					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable v-on:keyup.enter="convertToDestinationLatLng" @click:clear="clearDestinationLatLng">
 					</v-text-field>
 				</v-card>
 				<v-card outlined tile class="pa-2">
@@ -89,7 +87,7 @@ export default {
     };
   },
   methods: {
-    convertTooriginlatlng() {
+    convertToDestinationLatLng() {
       let splitText = this.origin_txt.split(",")
       let lat = Number(splitText[0])
       let lng = Number(splitText[1])
@@ -101,16 +99,24 @@ export default {
       let lng = Number(splitText[1])
       this.destination = {lat,lng}
     },
+    clearOriginLatLng() {
+      this.origin = ""
+    },
+    clearDestinationLatLng() {
+      this.destination = ""
+    },
     updateLatLng(e) {
       this.position = e.latlng;
     },
     setOrigin() {
-      this.origin = this.position;
+      this.origin = this.position
       this.origin_txt = this.position.lat.toString().concat(",",this.position.lng.toString())
+      this.position = ""
     },
     setDestination() {
-      this.destination = this.position;
+      this.destination = this.position
       this.destination_txt = this.position.lat.toString().concat(",",this.position.lng.toString())
+      this.position = ""
     },
     reverseLatLng(coordinates) {
       var coordinate = []
