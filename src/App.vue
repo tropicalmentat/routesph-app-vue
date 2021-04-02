@@ -92,13 +92,13 @@ export default {
     };
   },
   methods: {
-    convertToDestinationLatLng() {
+    convertToOriginLatLng() {
       let splitText = this.origin_txt.split(",")
       let lat = Number(splitText[0])
       let lng = Number(splitText[1])
       this.origin = {lat,lng}
     },
-    convertTodestinationlatlng() {
+    convertToDestinationlatlng() {
       let splitText = this.destination_txt.split(",")
       let lat = Number(splitText[0])
       let lng = Number(splitText[1])
@@ -106,9 +106,15 @@ export default {
     },
     clearOriginLatLng() {
       this.origin = ""
+      this.cleaned_latlng = []
+      this.distance = ""
+      this.time = ""
     },
     clearDestinationLatLng() {
       this.destination = ""
+      this.cleaned_latlng = []
+      this.distance = ""
+      this.time = ""
     },
     updateLatLng(e) {
       this.position = e.latlng;
