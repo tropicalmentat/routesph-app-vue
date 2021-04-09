@@ -79,7 +79,8 @@ export default {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       zoom: 13,
       center: [14.599512, 120.984222],
-      markerLatLng: [14.599512, 120.984222],
+      // center: [52.520008, 13.404954],
+      // markerLatLng: [14.599512, 120.984222],
       position: {},
       origin_txt: "",
       destination_txt: "",
@@ -152,8 +153,11 @@ export default {
       let distance = "Unresolved";
       let time = "Unresolved";
       try {
-      const result = await fetch (
+/*      const result = await fetch (
         `https://graphhopper.com/api/1/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&vehicle=bike&locale=en&calc_points=true&points_encoded=false&key=23959cc2-2380-4962-bb26-3746b8d7ff6b`
+        );*/
+      const result = await fetch (
+        `http://167.99.29.149/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&locale=en&calc_points=true&points_encoded=false`
         );
       if (result.status === 200) {
         const body = await result.json();
