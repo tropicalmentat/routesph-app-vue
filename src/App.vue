@@ -41,6 +41,11 @@
 						Estimated Travel Time: {{ time }} minutes
 					</div>
 				</v-card>
+				<v-card>
+					<v-btn color="grey" block @click="getBikeParking">
+						Get Parking
+					</v-btn>
+				</v-card>
 				</v-container>
 			</v-col>
 			<v-col>
@@ -61,6 +66,9 @@
 					</l-marker>
 					<l-marker id="origin" v-if="origin.lat && origin.lng" :lat-lng.sync="origin"></l-marker>
 					<l-marker id="destination" v-if="destination.lat && destination.lng" :lat-lng.sync="destination"></l-marker>
+
+					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :radius=6 :color='red'></l-circle-marker>
+
 				</LMap>
 			</v-col>
 		</v-row>
@@ -70,17 +78,16 @@
 
 
 <script>
-import { LMap, LTileLayer, LMarker, LPopup, LPolyline } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup, LPolyline, LCircleMarker } from "vue2-leaflet";
 
 export default {
-  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline },
+  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline, LCircleMarker },
   data() {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       zoom: 13,
       center: [14.599512, 120.984222],
-      // center: [52.520008, 13.404954],
-      // markerLatLng: [14.599512, 120.984222],
+      bike_parking_latlng: [14.5909299, 121.0607286],
       position: {},
       origin_txt: "",
       destination_txt: "",
@@ -89,7 +96,9 @@ export default {
       cleaned_latlng: [],
       route: [],
       distance: "",
-      time: ""
+      time: "",
+      bike_parking: []
+
     };
   },
   methods: {
@@ -153,11 +162,11 @@ export default {
       let distance = "Unresolved";
       let time = "Unresolved";
       try {
-/*      const result = await fetch (
-        `https://graphhopper.com/api/1/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&vehicle=bike&locale=en&calc_points=true&points_encoded=false&key=23959cc2-2380-4962-bb26-3746b8d7ff6b`
+      /*const result = await fetch (
+        `http://167.99.29.149/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&vehicle=bike&locale=en&calc_points=true&points_encoded=false`
         );*/
       const result = await fetch (
-        `http://167.99.29.149/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&locale=en&calc_points=true&points_encoded=false`
+        `http://167.99.29.149/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}`
         );
       if (result.status === 200) {
         const body = await result.json();
@@ -175,9 +184,29 @@ export default {
     // This is done to swap lng,lat in the result to lat,lng for the polyline to render
     var coordinate = []
 
-      for (coordinate of coordinates) {
+    for (coordinate of coordinates) {
         this.cleaned_latlng.push([coordinate[1],coordinate[0]])
       }
+    },
+    async getBikeParking() {
+      // let coordinates = "Unresolved";
+		try {
+		const result = await fetch (
+			// `http://167.99.29.149/get-bike-parking?${this.destination.lat},${this.destination.lng}`
+			`http://167.99.29.149/get-bike-parking?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}`
+			);
+		if (result.status === 200) {
+			const body = await result.json();
+			var item = []
+
+			for (item of body) {
+				this.bike_parking.push({id:item[0], latlng:[item[2],item[3]]})
+			}
+		alert(this.bike_parking)
+		}
+		} catch(e) {
+			alert(e);
+		}
     }
   },
 };
