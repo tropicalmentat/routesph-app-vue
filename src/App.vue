@@ -41,10 +41,13 @@
 						Estimated Travel Time: {{ time }} minutes
 					</div>
 				</v-card>
-				<v-card>
+				<v-card outlined tile class="pa-2">
 					<v-btn color="grey" block @click="getBikeParking">
 						Get Parking
 					</v-btn>
+					<div>
+						There are {{ bike_parking.length }} bike parking locations within 200m of your destination
+					</div>
 				</v-card>
 				</v-container>
 			</v-col>
@@ -67,7 +70,7 @@
 					<l-marker id="origin" v-if="origin.lat && origin.lng" :lat-lng.sync="origin"></l-marker>
 					<l-marker id="destination" v-if="destination.lat && destination.lng" :lat-lng.sync="destination"></l-marker>
 
-					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :radius=6 :color='red'></l-circle-marker>
+					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :radius=6 :color='green'></l-circle-marker>
 
 				</LMap>
 			</v-col>
@@ -125,6 +128,7 @@ export default {
       this.cleaned_latlng = []
       this.distance = ""
       this.time = ""
+      this.bike_parking = []
     },
     updateLatLng(e) {
       this.position = e.latlng;
@@ -156,6 +160,7 @@ export default {
       this.origin_txt = ""
       this.destination_txt = ""
       this.time = ""
+      this.bike_parking = []
     },
     async getRoute() {
       let coordinates = "Unresolved";
@@ -202,7 +207,6 @@ export default {
 			for (item of body) {
 				this.bike_parking.push({id:item[0], latlng:[item[2],item[3]]})
 			}
-		alert(this.bike_parking)
 		}
 		} catch(e) {
 			alert(e);
