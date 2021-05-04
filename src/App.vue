@@ -18,7 +18,8 @@
 						ROWT.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
-					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_txt" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
+					<v-icon>$vuetify.icons.map-book</v-icon>
+					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_address" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
 					</v-text-field>
 					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable v-on:keyup.enter="convertToDestinationLatLng" @click:clear="clearDestinationLatLng">
 					</v-text-field>
@@ -54,11 +55,11 @@
 			<v-col>
 				<LMap :zoom="zoom" :center="center" @click="updateLatLng"> 
 					<l-tile-layer :url="url"></l-tile-layer>
-					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="red"></l-polyline>
+					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="blue"></l-polyline>
 					<l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable>
 					<l-popup>
 						<v-container>
-							<v-btn color="green" block @click="setOrigin">
+							<v-btn color="green" block @click="setOrigin(); getOriginAddress()">
 							Set Origin
 							</v-btn>
 							<v-btn color="red" block @click="setDestination">
@@ -70,7 +71,7 @@
 					<l-marker id="origin" v-if="origin.lat && origin.lng" :lat-lng.sync="origin"></l-marker>
 					<l-marker id="destination" v-if="destination.lat && destination.lng" :lat-lng.sync="destination"></l-marker>
 
-					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :radius=6 :color='green'></l-circle-marker>
+					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :radius=6 :color="p.color" :fillOpacity	="1.0" :fillColor="p.color"></l-circle-marker>
 
 				</LMap>
 			</v-col>
@@ -84,7 +85,7 @@
 import { LMap, LTileLayer, LMarker, LPopup, LPolyline, LCircleMarker } from "vue2-leaflet";
 
 export default {
-  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline, LCircleMarker },
+  components: { LMap, LTileLayer, LMarker, LPopup, LPolyline, LCircleMarker},
   data() {
     return {
       url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -100,7 +101,9 @@ export default {
       route: [],
       distance: "",
       time: "",
-      bike_parking: []
+      bike_parking: [],
+
+      origin_address: ""
 
     };
   },
@@ -205,13 +208,32 @@ export default {
 			var item = []
 
 			for (item of body) {
-				this.bike_parking.push({id:item[0], latlng:[item[2],item[3]]})
+				this.bike_parking.push({id:item[0], latlng:[item[2],item[3]],color:"red"})
 			}
 		}
 		} catch(e) {
 			alert(e);
 		}
+    },
+
+  async getOriginAddress() {
+    this.loading = true
+    let address = "Unresolved address"
+    try {
+      const result = await fetch (
+        `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${this.origin.lat}&lon=${this.origin.lng}`
+      );
+      if (result.status === 200) {
+        const body = await result.json();
+        address = body.display_name;
+      }
+    } catch (e) {
+      alert("Reverse Geocode Error",e)
     }
+    this.loading = false;
+    this.origin_address = address;
+    alert(this.origin_address)
+  }
   },
 };
 </script>
