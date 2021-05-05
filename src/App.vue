@@ -21,7 +21,7 @@
 					<v-icon>$vuetify.icons.map-book</v-icon>
 					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_address" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
 					</v-text-field>
-					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_txt" clearable v-on:keyup.enter="convertToDestinationLatLng" @click:clear="clearDestinationLatLng">
+					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_address" clearable v-on:keyup.enter="convertToDestinationLatLng" @click:clear="clearDestinationLatLng">
 					</v-text-field>
 				</v-card>
 				<v-card outlined tile class="pa-2">
@@ -62,7 +62,7 @@
 							<v-btn color="green" block @click="setOrigin(); getOriginAddress()">
 							Set Origin
 							</v-btn>
-							<v-btn color="red" block @click="setDestination">
+							<v-btn color="red" block @click="setDestination(); getDestinationAddress()">
 							Set Destination
 							</v-btn>
 						</v-container>
@@ -103,7 +103,8 @@ export default {
       time: "",
       bike_parking: [],
 
-      origin_address: ""
+      origin_address: "",
+      destination_address: ""
 
     };
   },
@@ -162,6 +163,8 @@ export default {
       this.distance = ""
       this.origin_txt = ""
       this.destination_txt = ""
+      this.origin_address = ""
+      this.destination_address = ""
       this.time = ""
       this.bike_parking = []
     },
@@ -232,7 +235,23 @@ export default {
     }
     this.loading = false;
     this.origin_address = address;
-    alert(this.origin_address)
+  },
+ async getDestinationAddress() {
+  this.loading = true
+  let address = "Unresolved address"
+  try {
+    const result = await fetch (
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${this.destination.lat}&lon=${this.destination.lng}`
+    );
+    if (result.status === 200) {
+      const body = await result.json();
+      address = body.display_name;
+    }
+  } catch (e) {
+    alert("Reverse Geocode Error",e)
+  }
+  this.loading = false;
+  this.destination_address = address;
   }
   },
 };
