@@ -18,9 +18,14 @@
 						ROWT.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
-					<v-icon>$vuetify.icons.map-book</v-icon>
-					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_address" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
-					</v-text-field>
+          <v-autocomplete
+            :search-input.sync="origin_address"
+            hide-no-data
+          >
+            
+          </v-autocomplete>
+					<!-- <v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_address" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
+					</v-text-field> -->
 					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_address" clearable v-on:keyup.enter="convertToDestinationLatLng" @click:clear="clearDestinationLatLng">
 					</v-text-field>
 				</v-card>
@@ -252,6 +257,9 @@ export default {
   }
   this.loading = false;
   this.destination_address = address;
+  },
+  async getOriginLatLng() {
+
   }
   },
 };
