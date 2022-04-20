@@ -1,6 +1,7 @@
 # Routes.ph Web App
 
-![DemO](simplescreenrecorder-2021-07-27_12.59.51.mp4)
+![DemO](simplescreenrecorder-2021-07-27_12.56.47.gif)
+
 
 ## Project setup
 ```
