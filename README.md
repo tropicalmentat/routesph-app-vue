@@ -1,10 +1,11 @@
 # Routes.ph Web App
 
-![DemO](simplescreenrecorder-2021-07-27_12.56.47.gif)
+https://user-images.githubusercontent.com/8053617/164217529-f5795d9f-26bd-4fb4-8cca-6f200fce38f7.mp4
 
 
 ## Project setup
 ```
+
 npm install
 ```
 
