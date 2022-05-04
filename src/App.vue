@@ -173,11 +173,9 @@ export default {
       let distance = "Unresolved";
       let time = "Unresolved";
       try {
-      /*const result = await fetch (
-        `http://167.99.29.149/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&vehicle=bike&locale=en&calc_points=true&points_encoded=false`
-        );*/
+     
       const result = await fetch (
-        `http://167.99.29.149/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}`
+        `http://dev.routes.ph/route?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}&points_encoded=false`
         );
       if (result.status === 200) {
         const body = await result.json();
@@ -203,8 +201,8 @@ export default {
       // let coordinates = "Unresolved";
 		try {
 		const result = await fetch (
-			// `http://167.99.29.149/get-bike-parking?${this.destination.lat},${this.destination.lng}`
-			`http://167.99.29.149/get-bike-parking?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}`
+			
+			`http://dev.routes.ph/get-bike-parking?point=${this.origin.lat},${this.origin.lng}&point=${this.destination.lat},${this.destination.lng}`
 			);
 		if (result.status === 200) {
 			const body = await result.json();
