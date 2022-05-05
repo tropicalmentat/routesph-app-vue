@@ -15,7 +15,7 @@
 			<v-col lg="3">
 				<v-container>
 					<v-label>
-						ROWT.PH
+						ROUTES.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
 					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_address" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
