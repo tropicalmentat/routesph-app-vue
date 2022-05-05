@@ -18,7 +18,6 @@
 						ROWT.PH
 					</v-label>
 				<v-card outlined tile class="pa-2">
-					<v-icon>$vuetify.icons.map-book</v-icon>
 					<v-text-field label="Origin" hint="Type in lat,lng" v-model="origin_address" clearable v-on:keyup.enter="convertToOriginLatLng" @click:clear="clearOriginLatLng">
 					</v-text-field>
 					<v-text-field label="Destination" hint="Type in lat,lng" v-model="destination_address" clearable v-on:keyup.enter="convertToDestinationLatLng" @click:clear="clearDestinationLatLng">
@@ -71,7 +70,7 @@
 					<l-marker id="origin" v-if="origin.lat && origin.lng" :lat-lng.sync="origin"></l-marker>
 					<l-marker id="destination" v-if="destination.lat && destination.lng" :lat-lng.sync="destination"></l-marker>
 
-					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :radius=6 :color="p.color" :fillOpacity	="1.0" :fillColor="p.color"></l-circle-marker>
+					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :color="red" :fillColor="red"/>
 
 				</LMap>
 			</v-col>
@@ -207,10 +206,11 @@ export default {
 		if (result.status === 200) {
 			const body = await result.json();
 			var item = []
-
+      
 			for (item of body) {
-				this.bike_parking.push({id:item[0], latlng:[item[2],item[3]],color:"red"})
+				this.bike_parking.push({id:item[0], latlng:[item[1],item[2]]})
 			}
+      
 		}
 		} catch(e) {
 			alert(e);
