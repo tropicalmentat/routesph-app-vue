@@ -54,7 +54,7 @@
 			<v-col>
 				<LMap :zoom="zoom" :center="center" @click="updateLatLng"> 
 					<l-tile-layer :url="url"></l-tile-layer>
-					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="blue"></l-polyline>
+					<l-polyline v-if="cleaned_latlng" :lat-lngs="cleaned_latlng" :color="green"></l-polyline>
 					<l-marker  v-if="position.lat && position.lng" :lat-lng.sync="position" visible draggable>
 					<l-popup>
 						<v-container>
@@ -70,7 +70,7 @@
 					<l-marker id="origin" v-if="origin.lat && origin.lng" :lat-lng.sync="origin"></l-marker>
 					<l-marker id="destination" v-if="destination.lat && destination.lng" :lat-lng.sync="destination"></l-marker>
 
-					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :color="red" :fillColor="red"/>
+					<l-circle-marker v-for="p in bike_parking" v-bind:key="p.id" :lat-lng="p.latlng" :color="p.color" :fillColor="p.fillcolor"></l-circle-marker>
 
 				</LMap>
 			</v-col>
@@ -208,7 +208,7 @@ export default {
 			var item = []
       
 			for (item of body) {
-				this.bike_parking.push({id:item[0], latlng:[item[1],item[2]]})
+				this.bike_parking.push({id:item[0], latlng:[item[1],item[2]], color:'#ff0000', fillcolor:'#ff0000'})
 			}
       
 		}
